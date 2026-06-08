@@ -1,4 +1,4 @@
-**DySink: Dynamic Frame Sinks for Autoregressive Long Video Generation**  
+## **DySink: Dynamic Frame Sinks for Autoregressive Long Video Generation**  
 Bo Ye, Xinyu Cui, Jian Zhao, Tong Wei, Min-Ling Zhang  
 *arXiv 2026* [[Paper](https://arxiv.org/pdf/2605.21028)] [[Code](https://github.com/yebo0216best/DySink)] 
 
