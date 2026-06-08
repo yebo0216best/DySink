@@ -1,0 +1,79 @@
+# LongLive Interactive Inference with Memory KV Cache Configuration (PE-Core Vision Encoder Version)
+#
+# This configuration enables:
+# 1. Interactive prompt switching at specified frame indices (switch-only, no callback)
+# 2. Memory bank mechanism for KV cache storage and retrieval using visual-only similarity
+# 3. On prompt switch: memory bank KV caches and sink/local sliding-window
+#    frames are recached with the new prompt
+# Uses PE-Core VisionTransformer for visual-only feature extraction.
+#
+# Block-level retrieval (matching training pipeline):
+#   Retrieval unit = 1 block = num_frame_per_block latent frames = 12 real frames
+#   Visual-only cosine similarity for retrieval (no text encoder)
+
+# Denoising configuration
+denoising_step_list:
+- 1000
+- 750
+- 500
+- 250
+warp_denoising_step: true
+num_frame_per_block: 3
+
+# Model configuration
+model_name: Wan2.1-T2V-1.3B
+model_kwargs:
+  local_attn_size: 9
+  timestep_shift: 5.0
+  sink_size: 0
+  # Sink Anomaly Gate: if retrieved dynamic-sink KV attracts too many
+  # heads compared with local-window KV, fall back to local-window KV only.
+  sink_anomaly_gate: true
+  sink_anomaly_threshold: 0.7
+
+# Memory Bank Configuration (block-level retrieval, matching training pipeline)
+# Retrieval unit = 1 block = num_frame_per_block latent frames
+# Visual-only cosine similarity for retrieval (PE-Core, no text encoder)
+# If the bank has fewer than memory_top_k blocks, local attention is temporarily
+# expanded by the missing block count (in units of num_frame_per_block).
+use_memory_retrieval: true
+memory_top_k: 2              # Number of top similar blocks to retrieve (KV caches from top-2 matches are injected)
+memory_max_entries: null  # Maximum entries in memory bank (null for unlimited)
+
+# Memory Deduplication Configuration (Stack-like: keep old, skip new if too similar)
+# Visual-only dedup score (cosine similarity between block features)
+# If visual_sim > threshold → skip (keep old, higher-quality blocks)
+# If visual_sim <= threshold → add new block to memory bank
+memory_dedup_threshold: 0.9  # Blocks with visual_sim > threshold are skipped (matching training config)
+
+# Memory Encoder Configuration (PE-Core Vision Encoder, visual-only, no text encoder)
+# Block-level retrieval: each block = num_frame_per_block latent frames
+# Visual feature: decoded to 12 real frames, encoded by PE-Core VisionTransformer
+# Available models (at /c20250508/241406048/):
+#   PE-Core-B16-224 (output_dim=1024), PE-Core-S16-384 (output_dim=512)
+#   PE-Core-L14-336 (output_dim=1024), PE-Core-T16-384 (output_dim=512)
+memory_encoder_pe_config: "PE-Core-S16-384"
+memory_encoder_pe_checkpoint: "/XXX/PE-Core-S16-384/PE-Core-S16-384.pt"
+
+data_path: vbench/interactive_benchmark.jsonl
+output_folder: videos/interactive_bench
+inference_iter: -1
+num_output_frames: 240
+use_ema: false
+seed: 0
+num_samples: 1
+save_with_index: true
+switch_frame_indices: 40, 80, 120, 160, 200
+global_sink: false
+context_noise: 0
+
+generator_ckpt: /XXX/longlive-1.3B/ode_init.pt
+lora_ckpt_stage2: /XXX/longlive-1.3B/lora_stage2.pt
+
+adapter:
+  type: "lora"
+  rank: 256
+  alpha: 256  # scaling = alpha/rank = 1.0 (switch training config)
+  dropout: 0.0
+  dtype: "bfloat16"
+  verbose: false

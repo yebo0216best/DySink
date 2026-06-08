@@ -1,0 +1,64 @@
+# ============================================================================
+# Experiment B: sink_size=0, memory_top_k=2
+# No fixed sink block, dynamically retrieve 2 most similar blocks from memory bank
+# ============================================================================
+
+# Denoising configuration
+denoising_step_list:
+- 1000
+- 750
+- 500
+- 250
+warp_denoising_step: true
+num_frame_per_block: 3
+
+# Model configuration
+model_name: Wan2.1-T2V-1.3B
+model_kwargs:
+  local_attn_size: 9
+  timestep_shift: 5.0
+  sink_size: 0                    # [Exp B] No fixed sink block
+  # Sink Anomaly Gate: if retrieved dynamic-sink KV attracts too many
+  # heads compared with local-window KV, fall back to local-window KV only.
+  sink_anomaly_gate: true
+  sink_anomaly_threshold: 0.7
+
+# Memory Bank Configuration
+# [Exp B] sink_size=0 (no fixed block) + memory_top_k=2 (2 retrieved blocks)
+# If the bank has fewer than memory_top_k blocks, local attention is temporarily
+# expanded by the missing block count (in units of num_frame_per_block).
+use_memory_retrieval: true
+memory_top_k: 2              # [Exp B] Retrieve 2 most similar blocks from memory bank
+memory_max_entries: null
+
+# Memory Deduplication Configuration
+# Blocks must satisfy dedup threshold to be added after the first stored entry
+memory_dedup_threshold: 0.9
+
+# Memory Encoder Configuration (PE-Core Vision Encoder, visual-only)
+memory_encoder_pe_config: "PE-Core-S16-384"
+memory_encoder_pe_checkpoint: "/c20250508/241406048/PE-Core-S16-384/PE-Core-S16-384.pt"
+
+data_path: vbench/movie_extended.txt
+output_folder: videos/movie_gen
+inference_iter: -1
+num_output_frames: 240
+use_ema: false
+seed: 0
+num_samples: 1
+sample_batch_size: 1
+save_with_index: true
+global_sink: true
+context_noise: 0
+
+generator_ckpt: /XXX/dysink/stage1_model.pt
+lora_ckpt_stage2: /XXX/dysink/stage2_lora.pt
+
+# LoRA configuration
+adapter:
+  type: "lora"
+  rank: 256
+  alpha: 256  
+  dropout: 0.0
+  dtype: "bfloat16"
+  verbose: false
