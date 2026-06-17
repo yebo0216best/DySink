@@ -1,4 +1,4 @@
-generator_ckpt: /XXX/longlive-1.3B/ode_init.pt
+generator_ckpt: /DySink-weights/ode_init.pt
 generator_fsdp_wrap_strategy: size
 real_score_fsdp_wrap_strategy: size
 fake_score_fsdp_wrap_strategy: size
@@ -28,7 +28,7 @@ beta1: 0.0
 beta2: 0.999
 beta1_critic: 0.0
 beta2_critic: 0.999
-data_path: /XXX/longlive-1.3B/prompts/vidprom_filtered_extended.txt
+data_path: /DySink-weights/vidprom_filtered_extended.txt
 batch_size: 1
 gradient_accumulation_steps: 1
 ema_weight: 0.99
@@ -58,7 +58,7 @@ model_kwargs:
   # Sink Anomaly Gate: if static or retrieved sink KV attracts too many
   # heads compared with local-window KV, fall back to local-window KV only.
   sink_anomaly_gate: false
-  sink_anomaly_threshold: 0.5
+  sink_anomaly_threshold: 0.8
 
 # Visualization
 vis_interval: 200
@@ -66,7 +66,7 @@ vis_ema: false
 vis_video_lengths:
 - 21
 val_batch_size: 1
-val_data_path: /XXX/longlive-1.3B/prompts/vidprom_filtered_extended.txt
+val_data_path: /DySink-weights/vidprom_filtered_extended.txt
 
 min_num_training_frames: 21
 num_training_frames: 21
