@@ -5,7 +5,7 @@
 
 # Stage 2 (long video training) has been merged into Stage 3
 # Now we train directly from Stage 1 checkpoint with LoRA
-generator_ckpt: /XXX/dysink/stage1_model.pt
+generator_ckpt: /DySink-weights/stage1_base.pt
 
 # reset_step: true
 # auto_resume: false
@@ -42,8 +42,8 @@ beta1_critic: 0.0
 beta2_critic: 0.999
 
 # Two prompt files for switch training (no callback)
-data_path: /XXX/longlive-1.3B/prompts/vidprom_filtered_extended.txt
-switch_prompt_path: /XXX/longlive-1.3B/prompts/vidprom_filtered_extended_switch.txt
+data_path: /longlive-1.3B/prompts/vidprom_filtered_extended.txt
+switch_prompt_path: /longlive-1.3B/prompts/vidprom_filtered_extended_switch.txt
 
 batch_size: 1
 gradient_accumulation_steps: 1
@@ -77,7 +77,7 @@ model_kwargs:
   # Sink Anomaly Gate: if retrieved dynamic-sink KV attracts too many
   # heads compared with local-window KV, fall back to local-window KV only.
   sink_anomaly_gate: true
-  sink_anomaly_threshold: 0.7
+  sink_anomaly_threshold: 0.8
 
 # Visualization
 vis_interval: 100
@@ -85,8 +85,8 @@ vis_ema: false
 vis_video_lengths:
 - 240
 val_batch_size: 1
-val_data_path: /XXX/longlive-1.3B/prompts/vidprom_filtered_extended.txt
-val_switch_prompt_path: /XXX/longlive-1.3B/prompts/vidprom_filtered_extended_switch.txt
+val_data_path: /DySink-weightsvidprom_filtered_extended.txt
+val_switch_prompt_path: /DySink-weights/vidprom_filtered_extended_switch.txt
 
 slice_last_frames: 21
 
@@ -122,11 +122,11 @@ use_memory_in_training: true
 memory_top_k: 2             # [Exp B] Retrieve 2 most similar blocks from memory bank
 
 # Memory Deduplication Configuration
-memory_dedup_threshold: 0.9
+memory_dedup_threshold: 0.95
 
 # Memory Encoder Configuration (PE-Core Vision Encoder, visual-only)
 memory_encoder_pe_config: "PE-Core-S16-384"
-memory_encoder_pe_checkpoint: "/XXX/PE-Core-S16-384/PE-Core-S16-384.pt"
+memory_encoder_pe_checkpoint: "/DySink-weights/PE-Core-S16-384.pt"
 
 ## LoRA Configuration - LoRA for Stage 3 (training directly from Stage 1)
 adapter:
