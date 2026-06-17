@@ -21,7 +21,7 @@ model_kwargs:
   # Sink Anomaly Gate: if retrieved dynamic-sink KV attracts too many
   # heads compared with local-window KV, fall back to local-window KV only.
   sink_anomaly_gate: true
-  sink_anomaly_threshold: 0.7
+  sink_anomaly_threshold: 0.8
 
 # Memory Bank Configuration
 # [Exp B] sink_size=0 (no fixed block) + memory_top_k=2 (2 retrieved blocks)
@@ -33,11 +33,11 @@ memory_max_entries: null
 
 # Memory Deduplication Configuration
 # Blocks must satisfy dedup threshold to be added after the first stored entry
-memory_dedup_threshold: 0.9
+memory_dedup_threshold: 0.95
 
 # Memory Encoder Configuration (PE-Core Vision Encoder, visual-only)
 memory_encoder_pe_config: "PE-Core-S16-384"
-memory_encoder_pe_checkpoint: "/c20250508/241406048/PE-Core-S16-384/PE-Core-S16-384.pt"
+memory_encoder_pe_checkpoint: "/DySink-weights/PE-Core-S16-384.pt"
 
 data_path: vbench/movie_extended.txt
 output_folder: videos/movie_gen
@@ -51,8 +51,8 @@ save_with_index: true
 global_sink: true
 context_noise: 0
 
-generator_ckpt: /XXX/dysink/stage1_model.pt
-lora_ckpt_stage2: /XXX/dysink/stage2_lora.pt
+generator_ckpt: /DySink-weights/stage1_base.pt
+lora_ckpt_stage2: /DySink-weights/stage2_lora.pt
 
 # LoRA configuration
 adapter:
