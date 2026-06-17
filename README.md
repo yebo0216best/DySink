@@ -12,7 +12,6 @@ Bo Ye, Xinyu Cui, Jian Zhao, Tong Wei, Min-Ling Zhang
 DySink shares its environment with LongLive [**LongLive installation guide**](https://nvlabs.github.io/LongLive/LongLive2/docs/#installation).
 
 ## 📄 Citation
-📜 Paper: [arXiv:2605.21028](https://arxiv.org/pdf/2605.21028)
 ```bibtex
 @article{ye2026dysink,
   title={DySink: Dynamic Frame Sinks for Autoregressive Long Video Generation},
@@ -25,5 +24,5 @@ DySink shares its environment with LongLive [**LongLive installation guide**](ht
 ## 🙏 Acknowledgements
 Dysink builds on the codebases and ideas of:
 - [LongLive](https://github.com/NVlabs/LongLive): the base AR long-video generation framework.
-- [Self-Forcing](https://github.com/guandeh17/Self-Forcing): the causal AR training recipe and prompt pool.
-- [Wan](https://github.com/Wan-Video/Wan2.1): the base video generation model and VAE latent space.
+- [Self-Forcing](https://github.com/guandeh17/Self-Forcing): the causal AR training recipe and prompts.
+- [Wan](https://github.com/Wan-Video/Wan2.1): the base video generation models.
