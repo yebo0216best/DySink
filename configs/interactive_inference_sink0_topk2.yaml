@@ -29,7 +29,7 @@ model_kwargs:
   # Sink Anomaly Gate: if retrieved dynamic-sink KV attracts too many
   # heads compared with local-window KV, fall back to local-window KV only.
   sink_anomaly_gate: true
-  sink_anomaly_threshold: 0.7
+  sink_anomaly_threshold: 0.8
 
 # Memory Bank Configuration (block-level retrieval, matching training pipeline)
 # Retrieval unit = 1 block = num_frame_per_block latent frames
@@ -44,7 +44,7 @@ memory_max_entries: null  # Maximum entries in memory bank (null for unlimited)
 # Visual-only dedup score (cosine similarity between block features)
 # If visual_sim > threshold → skip (keep old, higher-quality blocks)
 # If visual_sim <= threshold → add new block to memory bank
-memory_dedup_threshold: 0.9  # Blocks with visual_sim > threshold are skipped (matching training config)
+memory_dedup_threshold: 0.95  # Blocks with visual_sim > threshold are skipped (matching training config)
 
 # Memory Encoder Configuration (PE-Core Vision Encoder, visual-only, no text encoder)
 # Block-level retrieval: each block = num_frame_per_block latent frames
@@ -53,7 +53,7 @@ memory_dedup_threshold: 0.9  # Blocks with visual_sim > threshold are skipped (m
 #   PE-Core-B16-224 (output_dim=1024), PE-Core-S16-384 (output_dim=512)
 #   PE-Core-L14-336 (output_dim=1024), PE-Core-T16-384 (output_dim=512)
 memory_encoder_pe_config: "PE-Core-S16-384"
-memory_encoder_pe_checkpoint: "/XXX/PE-Core-S16-384/PE-Core-S16-384.pt"
+memory_encoder_pe_checkpoint: "/DySink-weights/PE-Core-S16-384.pt"
 
 data_path: vbench/interactive_benchmark.jsonl
 output_folder: videos/interactive_bench
@@ -67,8 +67,8 @@ switch_frame_indices: 40, 80, 120, 160, 200
 global_sink: false
 context_noise: 0
 
-generator_ckpt: /XXX/longlive-1.3B/ode_init.pt
-lora_ckpt_stage2: /XXX/longlive-1.3B/lora_stage2.pt
+generator_ckpt: /DySink-weights/stage1_base.pt
+lora_ckpt_stage2: /DySink-weights/stage2_lora.pt
 
 adapter:
   type: "lora"
