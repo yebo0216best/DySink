@@ -7,3 +7,7 @@ Bo Ye, Xinyu Cui, Jian Zhao, Tong Wei, Min-Ling Zhang
 **DySink** is a retrieval-based framework for autoregressive long video generation that replaces **static frame sinks** (i.e., early frames cached as permanent anchors) with **dynamic frame sinks** retrieved from a compact memory bank. By adaptively selecting visually relevant historical frames and suppressing collapse‑prone attention patterns via a lightweight **sink anomaly gate**.
 
 **Note**: The code and the model weights have been released.
+
+## 📦 Installation
+
+DySink shares its environment with LongLive [**LongLive installation guide**](https://nvlabs.github.io/LongLive/LongLive2/docs/#installation).
