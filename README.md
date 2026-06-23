@@ -4,7 +4,7 @@
 
 [![arXiv](https://img.shields.io/badge/ArXiv-2605.21028-red)](https://arxiv.org/abs/2605.21028)
 &nbsp;&nbsp;&nbsp;&nbsp;
-[![Model Download](https://img.shields.io/badge/Data-Download-blue.svg)](https://huggingface.co/yebo0216best/DySink-weights)
+[![Model Download](https://img.shields.io/badge/%F0%9F%A4%97%20Model-HF-orange)](https://huggingface.co/yebo0216best/DySink-weights)
 
 
 </div>
